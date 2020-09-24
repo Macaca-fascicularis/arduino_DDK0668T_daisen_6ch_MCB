@@ -1,34 +1,38 @@
-// Daisen DDK0668T 6ch ���[�^�[�h���C�o�p�T���v���R�[�h
-// 2A/ch ���������Ȃ��i2A�ȏ㗬���Ɣj������j�Ȃǐ�����傫�����A
-// �����ȃ_�C�Z���̃��[�^�[�h���C�o��Arduino MEGA�œ������T���v���R�[�h�ł��B
-// DDK0668T���C�u�����̃C���N���[�h���K�v�ł��B�܂�Arduino UNO�ł͓����܂���B
+// Daisen DDK0668T 6ch モータードライバ用サンプルコード（シリアル通信版）
+// 2A/ch しか流せない（過大電流で破損）、電磁ノイズを放射し通信障害を起こすなどの問題はあるが
+// 安価なダイセンのモータードライバをArduino MEGAで動かすサンプルコードです
+// DSR1202 ダイセン4chモータードライバ http://rcjinput.blog.jp/archives/26907554.html のコードの大半を流用しています。
+// シリアル通信で動かしています。I2Cで動かしたい場合は https://yukispanicworld.tumblr.com/post/167520323134
+// などを参照してください。
 
-/* 	�����FSerial1���g�p����ꍇ
+// DDK0668Tライブラリのインクルードが必要です。またArduino UNOでは動きません。
+
+/* 	結線：Serial1を使用する場合
 
 	[Arduino Mega]			[DDK0668T]
 
-	5V�@==========================	5V
-	18(TX) =========�_�^==========	TX
-	D19(RX) ========�^�_==========	RX
+	5V　==========================	5V
+	18(TX) =========＼／==========	TX
+	D19(RX) ========／＼==========	RX
 	GND ==========================	GND
 
-	��Arduino MEGA��DDK0668T�́A�N���X�����Őڑ����܂��B
+	※Arduino MEGAとDDK0668Tは、クロス結線で接続します。
 */
 
 
 #include <DDK0668T.h>
 
-DDK0668T ddk0668t(1);	// �g�p����Serial�̑I���Bddk0668t(1)�Ȃ�Serial1
+DDK0668T ddk0668t(1);	// 使用するSerialの選択。ddk0668t(1)ならSerial1
 
 void setup()
 {
-  ddk0668t.Init();	// DDK0668T�̏������ƋN��
+  ddk0668t.Init();	// DDK0668Tの初期化と起動
 }
 
 void loop()
 {
 
-�@//( 1ch, 2ch, 3ch, 4ch, 5ch, 6ch )��-100�`100�Ŏw��B�}�C�i�X���w�肷��Ƌt�]
+　//( 1ch, 2ch, 3ch, 4ch, 5ch, 6ch )を-100～100で指定。マイナスを指定すると逆転
   ddk0668t.move(100, 100, 100, 100, 0, 0 ); 
 
 
